@@ -9,3 +9,4 @@ set ruler
 set autoindent
 set smarttab
 highlight Comment ctermfg=green
+set mouse=a
