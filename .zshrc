@@ -1,3 +1,4 @@
+export PS1='%F{green}%n%f@%F{cyan}%m:%f%~:$ '
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle ':completion:*' format ''
 zstyle ':completion:*' group-name ''
