@@ -36,12 +36,23 @@ alias pip='pip3'
 # kubectl aliases
 alias k='kubectl'
 alias kg='kubectl get '
-alias gps='git push'
-alias gpl='git pull'
 alias kex='kubectl exec -i -t'
 alias kgd='kubectl get deployments '
 alias kgp='kubectl get pods '
+alias kaf='kubectl apply -f '
+alias kl='kubectl logs -f '
+function kexsh() {
+  kubectl exec -i -t $1 -- /bin/bash
+}
+# do zsh completion for kexsh
+_kexsh() {
+  local -a pods
+  pods=($(kubectl get pods -o custom-columns=:.metadata.name --no-headers))
+  _describe 'pods' pods
+}
+compdef _kexsh kexsh
 
 alias aws='aws --endpoint-url https://object.ord1.coreweave.com'
 
 compinit
+
