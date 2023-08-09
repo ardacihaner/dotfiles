@@ -33,6 +33,15 @@ alias ll='ls -lh'
 alias python='python3'
 alias pip='pip3'
 
+# kubectl aliases
+alias k='kubectl'
+alias kg='kubectl get '
+alias gps='git push'
+alias gpl='git pull'
+alias kex='kubectl exec -i -t'
+alias kgd='kubectl get deployments '
+alias kgp='kubectl get pods '
+
 alias aws='aws --endpoint-url https://object.ord1.coreweave.com'
 
 compinit
