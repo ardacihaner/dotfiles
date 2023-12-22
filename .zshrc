@@ -27,7 +27,7 @@ autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
 # Aliases 
-alias ls='ls -G'
+alias ls='ls --color=auto'
 alias la='ls -lah'
 alias ll='ls -lh'
 alias python='python3'
@@ -51,8 +51,6 @@ _kexsh() {
   _describe 'pods' pods
 }
 compdef _kexsh kexsh
-
-alias aws='aws --endpoint-url https://object.ord1.coreweave.com'
 
 compinit
 
