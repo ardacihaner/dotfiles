@@ -1,4 +1,5 @@
 export PS1='%F{green}%n%f@%F{cyan}%m:%f%~:$ '
+
 zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
 zstyle ':completion:*' format ''
 zstyle ':completion:*' group-name ''
@@ -14,12 +15,10 @@ zstyle ":completion:*:commands" rehash 1
 zstyle ':completion:*:*:*:default' menu yes select search
 
 autoload -Uz compinit 
-compinit
-
 setopt appendhistory autocd
 unsetopt beep extendedglob nomatch notify
 
-bindkey -e
+bindkey -v
 autoload -Uz bracketed-paste-magic
 zle -N bracketed-paste bracketed-paste-magic
 
@@ -28,10 +27,15 @@ zle -N self-insert url-quote-magic
 
 # Aliases 
 alias ls='ls --color=auto'
-alias la='ls -lah'
-alias ll='ls -lh'
+alias la='ls -lah --color=auto'
+alias ll='ls -lh --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
 alias python='python3'
 alias pip='pip3'
+alias vim='nvim'
 
 # kubectl aliases
 alias k='kubectl'
@@ -50,7 +54,37 @@ _kexsh() {
   pods=($(kubectl get pods -o custom-columns=:.metadata.name --no-headers))
   _describe 'pods' pods
 }
+
+export EDITOR='vim'
+export VISUAL='vim'
+export PAGER='less'
+
+# PATHs
+export PATH="$PATH:$(go env GOPATH)/bin"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_REDUCE_BLANKS
+
+# Enable better globbing
+setopt EXTENDED_GLOB
+setopt GLOB_DOTS
+
+# Better directory navigation
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
+
+if [[ -n "$ZSH_COMPDUMP" ]]; then
+  compinit -i -d "$ZSH_COMPDUMP"
+else
+  compinit -i
+fi
+
 compdef _kexsh kexsh
-
-compinit
-
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+eval "$(starship init zsh)"
