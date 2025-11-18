@@ -373,6 +373,102 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
+  {
+    'pwntester/octo.nvim',
+    cmd = 'Octo',
+    opts = {
+      -- or "fzf-lua" or "snacks"
+      picker = 'telescope',
+      -- bare Octo command opens picker of commands
+      enable_builtin = true,
+      use_local_fs = true,
+    },
+    keys = {
+      {
+        '<leader>oi',
+        '<CMD>Octo issue list<CR>',
+        desc = 'List GitHub Issues',
+      },
+      {
+        '<leader>op',
+        '<CMD>Octo pr list<CR>',
+        desc = 'List GitHub PullRequests',
+      },
+      {
+        '<leader>od',
+        '<CMD>Octo discussion list<CR>',
+        desc = 'List GitHub Discussions',
+      },
+      {
+        '<leader>on',
+        '<CMD>Octo notification list<CR>',
+        desc = 'List GitHub Notifications',
+      },
+      {
+        '<leader>os',
+        function()
+          require('octo.utils').create_base_search_command { include_current_repo = true }
+        end,
+        desc = 'Search GitHub',
+      },
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- OR "ibhagwan/fzf-lua",
+      -- OR "folke/snacks.nvim",
+      'nvim-tree/nvim-web-devicons',
+    },
+  },
+  -- refactoring
+  --
+  {
+    'ThePrimeagen/refactoring.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    lazy = false,
+    opts = {},
+    config = function()
+      require('refactoring').setup {
+        prompt_func_param_type = {
+          go = true,
+        },
+        prompt_func_return_type = {
+          go = true,
+        },
+        show_success_message = true,
+      }
+      vim.keymap.set({ 'n', 'x' }, '<leader>re', function()
+        return require('refactoring').refactor 'Extract Function'
+      end, { expr = true, desc = 'Refactor: Extract Function' })
+
+      vim.keymap.set({ 'n', 'x' }, '<leader>rf', function()
+        return require('refactoring').refactor 'Extract Function To File'
+      end, { expr = true, desc = 'Refactor: Extract Function to File' })
+
+      vim.keymap.set({ 'n', 'x' }, '<leader>rv', function()
+        return require('refactoring').refactor 'Extract Variable'
+      end, { expr = true, desc = 'Refactor: Extract Variable' })
+
+      vim.keymap.set({ 'n', 'x' }, '<leader>rI', function()
+        return require('refactoring').refactor 'Inline Function'
+      end, { expr = true, desc = 'Refactor: Inline Function' })
+
+      vim.keymap.set({ 'n', 'x' }, '<leader>ri', function()
+        return require('refactoring').refactor 'Inline Variable'
+      end, { expr = true, desc = 'Refactor: Inline Variable' })
+
+      vim.keymap.set({ 'n', 'x' }, '<leader>rbb', function()
+        return require('refactoring').refactor 'Extract Block'
+      end, { expr = true, desc = 'Refactor: Extract Block' })
+
+      vim.keymap.set({ 'n', 'x' }, '<leader>rbf', function()
+        return require('refactoring').refactor 'Extract Block To File'
+      end, { expr = true, desc = 'Refactor: Extract Block to File' })
+    end,
+  },
 
   -- LSP Plugins
   {
@@ -841,19 +937,23 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'ellisonleao/gruvbox.nvim',
+    'catppuccin/nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
-      require('gruvbox').setup {
+      require('catppuccin').setup {
+        flavour = 'auto', -- latte, frappe, macchiato, mocha
+        background = { -- :h background
+          light = 'latte',
+          dark = 'mocha',
+        },
         terminal_colors = true, -- add neovim terminal colors
-        contrast = 'hard',
       }
 
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'gruvbox'
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
 
