@@ -30,6 +30,13 @@ return {
         --   terraform = { "tflint" },
         --   text = { "vale" }
       }
+
+      local golangci_args = require('lint').linters.golangcilint.args
+
+      if vim.env.GOLANGCI_LINT_CONFIG then
+        table.insert(golangci_args, '-c')
+        table.insert(golangci_args, vim.env.GOLANGCI_LINT_CONFIG)
+      end
       --
       -- You can disable the default linters by setting their filetypes to nil:
       -- lint.linters_by_ft['clojure'] = nil

@@ -432,12 +432,6 @@ require('lazy').setup({
     opts = {},
     config = function()
       require('refactoring').setup {
-        prompt_func_param_type = {
-          go = true,
-        },
-        prompt_func_return_type = {
-          go = true,
-        },
         show_success_message = true,
       }
       vim.keymap.set({ 'n', 'x' }, '<leader>re', function()
@@ -468,6 +462,11 @@ require('lazy').setup({
         return require('refactoring').refactor 'Extract Block To File'
       end, { expr = true, desc = 'Refactor: Extract Block to File' })
     end,
+  },
+
+  {
+    'b0o/schemastore.nvim',
+    lazy = true,
   },
 
   -- LSP Plugins
@@ -690,7 +689,15 @@ require('lazy').setup({
           },
         },
 
-        pyright = {},
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                typeCheckingMode = 'off', -- Disables type checking diagnostics
+              },
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -748,6 +755,48 @@ require('lazy').setup({
                 enable = true,
                 enableExperimental = false,
               },
+            },
+          },
+        },
+        yamlls = {
+          -- Enable lazy-loading of schema store
+          on_new_config = function(new_config)
+            new_config.settings.yaml.schemas = vim.tbl_deep_extend('force', new_config.settings.yaml.schemas or {}, require('schemastore').yaml.schemas())
+          end,
+          settings = {
+            redhat = {
+              telemetry = {
+                enabled = false,
+              },
+            },
+            yaml = {
+              keyordering = false,
+              competion = true,
+              validate = true,
+              completion = true,
+              schemaStore = {
+                -- Must disable built-in schemaStore support to use
+                -- schemas from SchemaStore.nvim plugin
+                enable = false,
+                -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+                url = '',
+              },
+            },
+            schemas = {
+              --['http://json.schemastore.org/github-workflow'] = '.github/workflows/*',
+              --['http://json.schemastore.org/github-action'] = '.github/action.{yml,yaml}',
+              --['http://json.schemastore.org/ansible-stable-2.9'] = 'roles/tasks/*.{yml,yaml}',
+              --['http://json.schemastore.org/prettierrc'] = '.prettierrc.{yml,yaml}',
+              --['http://json.schemastore.org/kustomization'] = 'kustomization.{yml,yaml}',
+              --['http://json.schemastore.org/ansible-playbook'] = '*play*.{yml,yaml}',
+              --['http://json.schemastore.org/chart'] = 'Chart.{yml,yaml}',
+              --['https://json.schemastore.org/dependabot-v2'] = '.github/dependabot.{yml,yaml}',
+              --['https://json.schemastore.org/gitlab-ci'] = '*gitlab-ci*.{yml,yaml}',
+              --['https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json'] = '*api*.{yml,yaml}',
+              --['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] = '*docker-compose*.{yml,yaml}',
+              --['https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json'] = '*flow*.{yml,yaml}',
+
+              kubernetes = '*.yaml',
             },
           },
         },
@@ -1049,6 +1098,9 @@ require('lazy').setup({
         enable = true,
       }
     end,
+  },
+  {
+    'HiPhish/rainbow-delimiters.nvim',
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
