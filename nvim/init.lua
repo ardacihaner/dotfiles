@@ -773,6 +773,9 @@ require('lazy').setup({
               keyordering = false,
               competion = true,
               validate = true,
+              format = {
+                enable = false,
+              },
               completion = true,
               schemaStore = {
                 -- Must disable built-in schemaStore support to use
@@ -1050,6 +1053,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    branch = 'master',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
       ensure_installed = {
